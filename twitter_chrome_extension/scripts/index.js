@@ -1,6 +1,6 @@
 
 const wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
-alert('welcome to twitter')
+alert('welcome to twitter') //used to let the user know that the extension is now active.
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
@@ -28,13 +28,13 @@ async function getTweet() {
   let parsedTweets = [];
   let sentiment;
   for (let tweet=0;tweet<tweets.length;tweet++) {
-    let aTags = tweets[tweet].getElementsByTagName("a");
+    let aTags = tweets[tweet].getElementsByTagName("a"); //Getting anchor tags to extract tweet ids
     for (let aTag=0; aTag<aTags.length;aTag++) {
       let href = aTags[aTag].getAttribute("href");
       if (href.includes("/status/")) {
         let tweetId = href.split("/status/");
         tweetId = tweetId[1];
-        if(tweetId.length>19)
+        if(tweetId.length>19) 
         {
           continue;
         }
@@ -44,17 +44,18 @@ async function getTweet() {
           
           for (let di of divs)
             {
-              let attr = di.getAttribute("data-testid");
+              let attr = di.getAttribute("data-testid"); //Finding div tags that contain the tweet text. 
               if(attr == "tweetText")
                 {
 
-                  const result = {text:String}
-                  result.text=di.innerText
+                  const result = {text:String} //structure to represent the input data.
+                  result.text=di.innerText //Extracting the text of each tweet.
                   var raw = [result];
                   //Using cross-site scripting since the rest api uses an http request
+                  //Using only the sentiment-score api since it uses the same function that is used by the language detection api to filter out english tweets.
                   chrome.runtime.sendMessage({type: "POST", url: "http://twitter-extn.eba-iz3p2gzp.us-west-1.elasticbeanstalk.com/api/sentiment-score", data: raw}, function(response) {
                   sentiment = response;
-                  addsemoji(tweets[tweet], sentiment);
+                  addsemoji(tweets[tweet], sentiment); //Function to add emojis to each tweet based on the sentiment.
                   });
                   
                   parsedTweets[tweetId]= di.innerText;
@@ -84,7 +85,7 @@ async function getTweet() {
             let attr1 = di.getAttribute("class");
             if(attr1 == "css-1dbjc4n r-18u37iz r-1wbh5a2 r-13hce6t")
               { 
-                if(di.firstChild.children.length==4)
+                if(di.firstChild.children.length==4) //This condition is used to prevent the extension from adding the detected mood again to the same tweet.
                 {
                   continue;
                 }
@@ -120,7 +121,7 @@ let main = async function () {
   let parsedTweetsGlobal = {};
   await wait(5000);
   parsedTweetsGlobal = await getTweet();
-  window.addEventListener("scroll", async function () {
+  window.addEventListener("scroll", async function () { //Using a window event listener to get new tweets on scrolling.
     let newParsedTweets = await getTweet();
 
     let newDistinctTweets = new Object();
