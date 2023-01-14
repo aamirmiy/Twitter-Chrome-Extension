@@ -1,0 +1,23 @@
+{
+    "name": "Twitter sentiment analysis",
+    "description": "Performing sentiment analysis on english tweets.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+      "default_icon": {"16": "icons8-puzzle-30.png"}
+    },
+    "background": {
+      "service_worker": "scripts/background.js"
+    },
+    "content_scripts":[
+        {
+            "matches": ["https://twitter.com/home"],
+            "js":["scripts/index.js"],
+            "run_at": "document_start"
+        }
+    ],
+    "host_permissions": [
+  "http://twitter-extn.eba-iz3p2gzp.us-west-1.elasticbeanstalk.com/api/language-detection",
+  "http://twitter-extn.eba-iz3p2gzp.us-west-1.elasticbeanstalk.com/api/sentiment-score"
+]
+  }

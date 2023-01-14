@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@stdlib/nlp-expand-contractions": "0.0.8",
+    "axios": "^1.2.2",
     "body-parser": "^1.20.1",
     "cld": "^2.8.4",
     "cookie-parser": "~1.4.4",
@@ -21,7 +22,9 @@
     "languagedetect": "^2.0.0",
     "mongoose": "^6.8.3",
     "morgan": "~1.9.1",
+    "request": "^2.88.2",
     "sentiment": "^5.0.2",
+    "typedi": "^0.10.0",
     "wink-sentiment": "^5.0.2"
   }
 }
