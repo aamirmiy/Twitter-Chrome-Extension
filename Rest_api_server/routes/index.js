@@ -17,8 +17,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'MOLA' });
 });
 
-
-function english_tweets(sentences) {
+//This function is used to detect english tweets using the languagedetect library
+function english_tweets(sentences) { 
   const inputs = sentences
 
   const tweets = []
@@ -28,12 +28,12 @@ function english_tweets(sentences) {
     const tweet = new tweet_schema
 
     tweet.text = inputs[i].text
-    const ans = lngDetector.detect(contractions(inputs[i].text));
+    const ans = lngDetector.detect(contractions(inputs[i].text)); //Expanding contractions of words since otherwise the languagedetect fails to give an accurate answer.
     console.log(ans);
     if(ans.length == 0){
       tweet.is_english='false'
     }
-    else if(ans[0][0] == 'english' || ans[0][0] == 'pidgin'){
+    else if(ans[0][0] == 'english' || ans[0][0] == 'pidgin'){  //pidgin is also specified since it represents english slang.
       tweet.is_english = 'true'
     }
     else{
@@ -52,13 +52,13 @@ function english_tweets(sentences) {
 };
 
 
-router.post('/api/language-detection', (req, res)=>{
+router.post('/api/language-detection', (req, res)=>{ //This endpoint uses the above function
   eng_twt = english_tweets(req.body)
   res.json(eng_twt)
 });
 
 
-router.post('/api/sentiment-score', (req,res)=>{
+router.post('/api/sentiment-score', (req,res)=>{  //This endpoint also uses the above specified function to filter the english tweets.
 
   eng_twt = english_tweets(req.body)
   const inputs=[]
@@ -79,7 +79,7 @@ router.post('/api/sentiment-score', (req,res)=>{
     const tweet = new sentiment_schema
 
     tweet.text = inputs[i].text
-    const score = sentiment.analyze(inputs[i].text);
+    const score = sentiment.analyze(inputs[i].text); //Using the sentiment library to calculate the sentiment score of tweets.
     tweet.sentiment_score = score.score
     if(score.score>0){
       tweet.detected_mood = 'positive'
