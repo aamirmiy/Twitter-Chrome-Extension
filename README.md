@@ -1,4 +1,4 @@
-# MOLA
+# Tweet Analysis
 1. ## Rest-api-server  
     * This folder contains the code for the two rest api end_points.  
     * The index.js file contains the router for both the api's.
